@@ -1,22 +1,22 @@
 package com.keyin.hynes.braden.invoices.api.services;
 import java.util.List;
-import org.bson.types.ObjectId;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.keyin.hynes.braden.invoices.api.documents.InvoiceDocument;
+import com.keyin.hynes.braden.invoices.api.entities.InvoiceEntity;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.InvoiceRepository;
 @Service
 public final class InvoiceService {
   @Autowired
   private InvoiceRepository repo;
-  private InvoiceDocument target;
+  private InvoiceEntity target;
   /**
    * @name    getAll
    * @desc    List all invoices
    * @route   GET /invoices
    * @access  private
    */
-  public List<InvoiceDocument> getAll() {
+  public List<InvoiceEntity> getAll() {
     return repo.findAll();
   }
   /**
@@ -25,18 +25,18 @@ public final class InvoiceService {
    * @route   POST /invoices
    * @access  private
    */
-  public InvoiceDocument add(InvoiceDocument invoice) {
+  public InvoiceEntity add(InvoiceEntity invoice) {
     return repo.save(invoice);
   }
   /**
-   * @name    edit
+   * @name    edt
    * @desc    Edit an invoice
    * @route   PATCH /invoices/:id
    * @access  private
    */
-  public InvoiceDocument edit(
-    ObjectId id,
-    InvoiceDocument patch
+  public InvoiceEntity edit(
+    UUID id,
+    InvoiceEntity patch
   ) {
     target = repo.findById(id).get();
     if (patch.getVendor() != null) target.setVendor(patch.getVendor());
@@ -53,7 +53,7 @@ public final class InvoiceService {
    * @route   DELETE /invoices/:id
    * @access  private
    */
-  public void delete(ObjectId id) {
+  public void delete(UUID id) {
     repo.deleteById(id);
   }
 }

@@ -1,6 +1,6 @@
-package com.keyin.hynes.braden.invoices.api.controllers.rest;
+package com.keyin.hynes.braden.invoices.api.controllers;
 import java.util.List;
-import org.bson.types.ObjectId;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.keyin.hynes.braden.invoices.api.documents.InvoiceDocument;
+import com.keyin.hynes.braden.invoices.api.entities.InvoiceEntity;
 import com.keyin.hynes.braden.invoices.api.services.InvoiceService;
 @RestController
 @CrossOrigin
@@ -20,17 +20,17 @@ public final class InvoiceRestController {
   @Autowired
   private InvoiceService service = new InvoiceService();
   @GetMapping
-  public List<InvoiceDocument> getAll() {
+  public List<InvoiceEntity> getAll() {
     return service.getAll();
   }
   @PostMapping
-  public InvoiceDocument add(@RequestBody InvoiceDocument invoice) {
+  public InvoiceEntity add(@RequestBody InvoiceEntity invoice) {
     return service.add(invoice);
   }
   @PatchMapping("/{id}")
-  public InvoiceDocument edit (
-    @PathVariable("id") ObjectId id,
-    @RequestBody InvoiceDocument changes
+  public InvoiceEntity edit (
+    @PathVariable("id") UUID id,
+    @RequestBody InvoiceEntity changes
   ) {
     return service.edit(
       id,
@@ -38,7 +38,7 @@ public final class InvoiceRestController {
     );
   }
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable("id") ObjectId id) {
+  public void delete(@PathVariable("id") UUID id) {
     service.delete(id);
   }
 }

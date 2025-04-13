@@ -1,7 +1,7 @@
 package com.keyin.hynes.braden.invoices.api.interfaces.repositories;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.keyin.hynes.braden.invoices.api.documents.InvoiceDocument;
+import com.keyin.hynes.braden.invoices.api.entities.InvoiceEntity;
 @Repository
-public interface InvoiceRepository extends MongoRepository<InvoiceDocument, ObjectId> {}
+public interface InvoiceRepository extends JpaRepository<InvoiceEntity, UUID> {}

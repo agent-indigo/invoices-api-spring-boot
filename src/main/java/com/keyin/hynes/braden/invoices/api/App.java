@@ -6,8 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @ComponentScan(basePackages = {
   "com.keyin.hynes.braden.invoices.api.config",
-  "com.keyin.hynes.braden.invoices.api.controllers.rest",
-  "com.keyin.hynes.braden.invoices.api.documents",
+  "com.keyin.hynes.braden.invoices.api.controllers",
+  "com.keyin.hynes.braden.invoices.api.entities",
   "com.keyin.hynes.braden.invoices.api.interfaces.repositories",
   "com.keyin.hynes.braden.invoices.api.services"
 })
