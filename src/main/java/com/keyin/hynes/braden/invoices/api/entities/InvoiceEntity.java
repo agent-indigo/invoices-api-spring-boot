@@ -1,6 +1,7 @@
 package com.keyin.hynes.braden.invoices.api.entities;
 import java.sql.Date;
 import com.keyin.hynes.braden.invoices.api.abstracts.DataEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -13,6 +14,7 @@ import lombok.ToString;
 @Table(name = "invoices")
 public final class InvoiceEntity extends DataEntity {
   private String vendor;
+  @Column(unique = true)
   private String invoiceId;
   private Date date;
   private Float subtotal;
