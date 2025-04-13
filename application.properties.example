@@ -1,1 +1,1 @@
-spring.data.mongodb.uri = mongodb+srv://<username>:<password>@<server>/<database>?retryWrites=true&w=majority
+spring.data.mongodb.uri = mongodb+srv://<username>:<password>@localhost:27017/invoices?retryWrites=true&w=majority
