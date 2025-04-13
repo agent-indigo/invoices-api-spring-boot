@@ -4,7 +4,7 @@
 
 Simple invoice management RESTful API
 
-Front end: [repo](https://github.com/agent-indigo/invoices-web)
+Front end: [repo](https://github.com/agent-indigo/invoices-web-client-react)
 
 ## User Roles
 
