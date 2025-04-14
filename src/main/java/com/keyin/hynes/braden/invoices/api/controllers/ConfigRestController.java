@@ -17,11 +17,11 @@ public final class ConfigRestController {
   @Autowired
   private UserService service = new UserService();
   @GetMapping("/status")
-  public ConfigStatus geConfigStatus() {
-    return service.geConfigStatus();
+  public ConfigStatus getConfigStatus() {
+    return service.getConfigStatus();
   }
-  @PostMapping("/rootUserPassword")
-  public UserDetails setRootUserPassword(@RequestBody Credentials credentials) throws Exception {
-    return service.setRootUserPassword(credentials);
+  @PostMapping("/rootPassword")
+  public UserDetails createRootUser(@RequestBody Credentials credentials) throws Exception {
+    return service.createRootUser(credentials);
   }
 }

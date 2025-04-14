@@ -30,12 +30,12 @@ public final class UserService implements UserDetailsService {
   private boolean rootExists() {
     return repo.findAllByAuthority(rootAuthority).size() > 0;
   }
-  public ConfigStatus geConfigStatus() {
+  public ConfigStatus getConfigStatus() {
     return new ConfigStatus(
       rootExists()
     );
   }
-  public UserDetails setRootUserPassword(Credentials credentials) throws Exception {
+  public UserDetails createRootUser(Credentials credentials) throws Exception {
     if (rootExists()) {
       throw new Exception("The root user already exists.");
     } else if (
