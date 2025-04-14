@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.keyin.hynes.braden.invoices.api.entities.UserEntity;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.UserRepository;
@@ -17,27 +18,41 @@ public final class UserService implements UserDetailsService {
   @Autowired
   private UserRepository repo;
   private UserEntity target;
+  private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+  private SimpleGrantedAuthority rootAuthority = new SimpleGrantedAuthority("root");
+  private SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority("user");
+  private String emptyFieldMessage = "At least one field is empty.";
+  private String failedPasswordConfirmationMessage = "Passwords don't match.";
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return repo.findByUsername(username);
   }
+  private boolean rootExists() {
+    return repo.findAllByAuthority(rootAuthority).size() > 0;
+  }
   public ConfigStatus geConfigStatus() {
     return new ConfigStatus(
-      repo.findAllByAuthority(new SimpleGrantedAuthority("root")).size() > 0
+      rootExists()
     );
   }
   public UserDetails setRootUserPassword(Credentials credentials) throws Exception {
-    if (repo.findAllByAuthority(new SimpleGrantedAuthority("root")).size() > 0) {
+    if (rootExists()) {
       throw new Exception("The root user already exists.");
-    } else if (credentials.password() == null | credentials.confirmPassword() == null) {
-      throw new Exception("At least one field is empty.");
+    } else if (
+      credentials.password() == null |
+      credentials.confirmPassword() == null
+     ) {
+      throw new Exception(emptyFieldMessage);
     } else if (credentials.password() != credentials.confirmPassword()) {
-      throw new Exception("Passwords do not match.");
+      throw new Exception(failedPasswordConfirmationMessage);
     } else {
       return repo.save(new UserEntity(
         "root",
-        credentials.password(),
-        List.of(new SimpleGrantedAuthority("root")),
+        passwordEncoder.encode(credentials.password()),
+        List.of(
+          rootAuthority,
+          userAuthority
+        ),
         true,
         true,
         true,
@@ -46,15 +61,19 @@ public final class UserService implements UserDetailsService {
     }
   }
   public UserDetails add(Credentials credentials) throws Exception {
-    if (credentials.username() == null | credentials.password() == null | credentials.confirmPassword() == null) {
-      throw new Exception("At least one field is empty.");
+    if (
+      credentials.username() == null |
+      credentials.password() == null |
+      credentials.confirmPassword() == null
+    ) {
+      throw new Exception(emptyFieldMessage);
     } else if (credentials.password() != credentials.confirmPassword()) {
-      throw new Exception("Passwords do not match.");
+      throw new Exception(failedPasswordConfirmationMessage);
     } else {
       return repo.save(new UserEntity(
         credentials.username(),
-        credentials.password(),
-        List.of(new SimpleGrantedAuthority("user")),
+        passwordEncoder.encode(credentials.password()),
+        List.of(userAuthority),
         true,
         true,
         true,
@@ -66,13 +85,22 @@ public final class UserService implements UserDetailsService {
     UUID id,
     NewPassword newPassword
   ) throws Exception {
-    if (newPassword.currentPassword() == null | newPassword.newPassword() == null | newPassword.confirmNewPassword() == null) {
-      throw new Exception("At least one field is empty.");
+    target = repo.findById(id).get();
+    if (
+      newPassword.currentPassword() == null |
+      newPassword.newPassword() == null |
+      newPassword.confirmNewPassword() == null
+    ) {
+      throw new Exception(emptyFieldMessage);
     } else if (newPassword.newPassword() != newPassword.confirmNewPassword()) {
-      throw new Exception("Passwords do not match.");
+      throw new Exception(failedPasswordConfirmationMessage);
+    } else if (!passwordEncoder.matches(
+      newPassword.newPassword(),
+      target.getPassword()
+    )) {
+      throw new Exception("Incorrect password.");
     } else {
-      target = repo.findById(id).get();
-      target.setPassword(newPassword.newPassword());
+      target.setPassword(passwordEncoder.encode(newPassword.newPassword()));
       return repo.save(target);
     }
   }
@@ -83,13 +111,16 @@ public final class UserService implements UserDetailsService {
   ) throws Exception {
     if (currentUserID == targetUserId) {
       throw new Exception("You can't change your own password this way.");
-    } else if (newPassword.newPassword() == null | newPassword.confirmNewPassword() == null) {
-      throw new Exception("At least one field is empty.");
+    } else if (
+      newPassword.newPassword() == null |
+      newPassword.confirmNewPassword() == null
+    ) {
+      throw new Exception(emptyFieldMessage);
     } else if (newPassword.newPassword() != newPassword.confirmNewPassword()) {
-      throw new Exception("Passwords do not match.");
+      throw new Exception(failedPasswordConfirmationMessage);
     } else {
       target = repo.findById(targetUserId).get();
-      target.setPassword(newPassword.newPassword());
+      target.setPassword(passwordEncoder.encode(newPassword.newPassword()));
       return repo.save(target);
     }
   }
