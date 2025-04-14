@@ -19,8 +19,7 @@ public class SecurityConfig {
     chain.authenticationProvider(authenticationProvider());
     chain.authorizeHttpRequests(auth -> {
       auth.requestMatchers("/users/login").permitAll();
-      auth.requestMatchers("/config/status").permitAll();
-      auth.requestMatchers("/config/rootUserPassword").permitAll();
+      auth.requestMatchers("/config").permitAll();
       auth.anyRequest().authenticated();
     });
     return chain.build();
