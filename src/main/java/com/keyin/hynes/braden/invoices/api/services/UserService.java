@@ -19,7 +19,6 @@ public final class UserService implements UserDetailsService {
   private UserRepository repo;
   private UserEntity target;
   private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
-  private SimpleGrantedAuthority rootAuthority = new SimpleGrantedAuthority("root");
   private SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority("user");
   private String emptyFieldMessage = "At least one field is empty.";
   private String failedPasswordConfirmationMessage = "Passwords don't match.";
@@ -28,7 +27,7 @@ public final class UserService implements UserDetailsService {
     return repo.findByUsername(username);
   }
   private boolean rootExists() {
-    return repo.findAllByAuthority(rootAuthority).size() > 0;
+    return repo.findAllByAuthoritiesContaining("root").size() > 0;
   }
   public ConfigStatus getConfigStatus() {
     return new ConfigStatus(
@@ -50,7 +49,7 @@ public final class UserService implements UserDetailsService {
         "root",
         passwordEncoder.encode(credentials.password()),
         List.of(
-          rootAuthority,
+          new SimpleGrantedAuthority("root"),
           userAuthority
         ),
         true,
