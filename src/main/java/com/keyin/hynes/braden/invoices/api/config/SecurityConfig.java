@@ -22,7 +22,6 @@ public class SecurityConfig {
     chain.authorizeHttpRequests(auth -> {
       auth.requestMatchers("/users/login").permitAll();
       auth.requestMatchers("/config").permitAll();
-      auth.anyRequest().authenticated();
       auth.requestMatchers("/users/changePassword").hasAuthority("user");
       auth.requestMatchers("/users/logout").hasAuthority("user");
       auth.requestMatchers("/users").hasAuthority("root");

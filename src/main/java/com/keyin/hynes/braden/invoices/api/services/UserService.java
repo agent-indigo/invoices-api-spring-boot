@@ -27,7 +27,7 @@ public final class UserService implements UserDetailsService {
     return repo.findByUsername(username);
   }
   private boolean rootExists() {
-    return repo.findAllByAuthoritiesContaining("root").size() > 0;
+    return repo.findAllByHasAuthority("root").size() > 0;
   }
   public ConfigStatus getConfigStatus() {
     return new ConfigStatus(
