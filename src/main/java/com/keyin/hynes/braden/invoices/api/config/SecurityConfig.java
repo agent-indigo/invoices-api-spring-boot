@@ -23,6 +23,10 @@ public class SecurityConfig {
       auth.requestMatchers("/users/login").permitAll();
       auth.requestMatchers("/config").permitAll();
       auth.anyRequest().authenticated();
+      auth.requestMatchers("/users/changePassword").hasAuthority("user");
+      auth.requestMatchers("/users/logout").hasAuthority("user");
+      auth.requestMatchers("/users").hasAuthority("root");
+      auth.anyRequest().hasAuthority("user");
     });
     return chain.build();
   }
