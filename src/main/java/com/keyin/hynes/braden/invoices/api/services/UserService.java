@@ -19,6 +19,7 @@ public final class UserService implements UserDetailsService {
   private UserRepository repo;
   private UserEntity target;
   private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+  private SimpleGrantedAuthority rootAuthority = new SimpleGrantedAuthority("root");
   private SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority("user");
   private String emptyFieldMessage = "At least one field is empty.";
   private String failedPasswordConfirmationMessage = "Passwords don't match.";
@@ -49,7 +50,7 @@ public final class UserService implements UserDetailsService {
         "root",
         passwordEncoder.encode(credentials.password()),
         List.of(
-          new SimpleGrantedAuthority("root"),
+          rootAuthority,
           userAuthority
         ),
         true,
@@ -129,7 +130,11 @@ public final class UserService implements UserDetailsService {
   public List<UserEntity> list() {
     return repo.findAll();
   }
-  public void delete(UUID id) {
-    repo.deleteById(id);
+  public void delete(UUID id) throws Exception {
+    if (repo.findById(id).get().getAuthorities().contains(rootAuthority)) {
+      throw new Exception("The root user shouldn't be deleted.");
+    } else {
+      repo.deleteById(id);
+    }
   }
 }

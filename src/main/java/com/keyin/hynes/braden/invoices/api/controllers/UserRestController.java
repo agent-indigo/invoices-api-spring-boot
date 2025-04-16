@@ -59,7 +59,7 @@ public final class UserRestController {
     );
   }
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable UUID id) {
+  public void delete(@PathVariable UUID id) throws Exception {
     service.delete(id);
   }
 }
