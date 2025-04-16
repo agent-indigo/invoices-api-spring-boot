@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.keyin.hynes.braden.invoices.api.entities.UserEntity;
+import com.keyin.hynes.braden.invoices.api.enums.Role;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.UserRepository;
 import com.keyin.hynes.braden.invoices.api.records.ConfigStatus;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
@@ -29,7 +30,7 @@ public final class UserService implements UserDetailsService {
     return repo.findByUsername(username);
   }
   private boolean rootExists() {
-    return repo.findAllByHasAuthority("ROOT").size() > 0;
+    return repo.findAllByRole(Role.root).size() > 0;
   }
   public ConfigStatus getConfigStatus() {
     return new ConfigStatus(
@@ -50,6 +51,7 @@ public final class UserService implements UserDetailsService {
       return repo.save(new UserEntity(
         "root",
         passwordEncoder.encode(credentials.password()),
+        Role.root,
         List.of(
           rootAuthority,
           userAuthority
@@ -74,6 +76,7 @@ public final class UserService implements UserDetailsService {
       return repo.save(new UserEntity(
         credentials.username(),
         passwordEncoder.encode(credentials.password()),
+        Role.user,
         List.of(userAuthority),
         true,
         true,

@@ -4,6 +4,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.keyin.hynes.braden.invoices.api.abstracts.DataEntity;
+import com.keyin.hynes.braden.invoices.api.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -24,7 +25,7 @@ public final class UserEntity extends DataEntity implements UserDetails {
   private String username;
   @JsonIgnore
   private String password;
-  @Column(columnDefinition = "varchar[]")
+  private Role role;
   private List<SimpleGrantedAuthority> authorities;
   private boolean accountNonExpired;
   private boolean accountNonLocked;
