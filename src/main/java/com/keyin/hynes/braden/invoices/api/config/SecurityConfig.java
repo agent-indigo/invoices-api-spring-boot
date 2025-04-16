@@ -20,11 +20,11 @@ public class SecurityConfig {
     chain.authenticationProvider(authenticationProvider());
     chain.csrf(AbstractHttpConfigurer::disable);
     chain.authorizeHttpRequests(auth -> {
-      auth.requestMatchers("/users/login").permitAll();
       auth.requestMatchers("/config/*").permitAll();
-      auth.requestMatchers("/users/changePassword").hasRole("USER");
+      auth.requestMatchers("/users/*").hasRole("ROOT");
+      auth.requestMatchers("/users/login").permitAll();
       auth.requestMatchers("/users/logout").hasRole("USER");
-      auth.requestMatchers("/users").hasRole("ROOT");
+      auth.requestMatchers("/users/changePassword").hasRole("USER");
       auth.anyRequest().hasRole("USER");
     });
     return chain.build();
