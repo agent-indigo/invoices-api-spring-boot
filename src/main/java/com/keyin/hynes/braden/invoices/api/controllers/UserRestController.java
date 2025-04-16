@@ -1,6 +1,7 @@
 package com.keyin.hynes.braden.invoices.api.controllers;
 import java.util.List;
 import java.util.UUID;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,7 +32,7 @@ public final class UserRestController {
     return service.get(id);
   }
   @PostMapping
-  public UserDetails add(@RequestBody Credentials credentials) throws Exception {
+  public UserDetails add(@RequestBody Credentials credentials) throws BadRequestException {
     return service.add(credentials);
   }
   @PatchMapping
@@ -39,7 +40,7 @@ public final class UserRestController {
     // TO DO: Get this from the JWT
     UUID id,
     @RequestBody NewPassword newPassword
-  ) throws Exception {
+  ) throws BadRequestException {
     return service.changePassword(
       id,
       newPassword
@@ -51,7 +52,7 @@ public final class UserRestController {
     UUID currentUserId,
     @PathVariable("id") UUID targetUserId,
     @RequestBody NewPassword newPassword
-  ) throws Exception {
+  ) throws BadRequestException {
     return service.resetPassword(
       currentUserId,
       targetUserId,
@@ -59,7 +60,7 @@ public final class UserRestController {
     );
   }
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable UUID id) throws Exception {
+  public void delete(@PathVariable UUID id) throws BadRequestException {
     service.delete(id);
   }
 }

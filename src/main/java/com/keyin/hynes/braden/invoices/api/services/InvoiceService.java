@@ -31,20 +31,20 @@ public final class InvoiceService {
   /**
    * @name    edt
    * @desc    Edit an invoice
-   * @route   PATCH /invoices/:id
+   * @route   changes /invoices/:id
    * @access  private
    */
   public InvoiceEntity edit(
     UUID id,
-    InvoiceEntity patch
+    InvoiceEntity changes
   ) {
     target = repo.findById(id).get();
-    if (patch.getVendor() != null) target.setVendor(patch.getVendor());
-    if (patch.getSubtotal() != null) target.setSubtotal(patch.getSubtotal());
-    if (patch.getHst() != null) target.setHst(patch.getHst());
-    if (patch.getTotal() != null) target.setTotal(patch.getTotal());
-    if (patch.getInvoiceId() != null) target.setInvoiceId(patch.getInvoiceId());
-    if (patch.getDate() != null) target.setDate(patch.getDate());
+    if (changes.getVendor() != null) target.setVendor(changes.getVendor());
+    if (changes.getSubtotal() != null) target.setSubtotal(changes.getSubtotal());
+    if (changes.getHst() != null) target.setHst(changes.getHst());
+    if (changes.getTotal() != null) target.setTotal(changes.getTotal());
+    if (changes.getInvoiceId() != null) target.setInvoiceId(changes.getInvoiceId());
+    if (changes.getDate() != null) target.setDate(changes.getDate());
     return repo.save(target);
   }
   /**

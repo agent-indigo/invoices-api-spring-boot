@@ -22,10 +22,10 @@ public class SecurityConfig {
     chain.authorizeHttpRequests(auth -> {
       auth.requestMatchers("/users/login").permitAll();
       auth.requestMatchers("/config/*").permitAll();
-      auth.requestMatchers("/users/changePassword").hasAuthority("user");
-      auth.requestMatchers("/users/logout").hasAuthority("user");
-      auth.requestMatchers("/users").hasAuthority("root");
-      auth.anyRequest().hasAuthority("user");
+      auth.requestMatchers("/users/changePassword").hasRole("USER");
+      auth.requestMatchers("/users/logout").hasRole("USER");
+      auth.requestMatchers("/users").hasRole("ROOT");
+      auth.anyRequest().hasRole("USER");
     });
     return chain.build();
   }
