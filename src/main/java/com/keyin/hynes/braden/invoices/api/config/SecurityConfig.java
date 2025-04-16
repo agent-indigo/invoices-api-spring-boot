@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import com.keyin.hynes.braden.invoices.api.services.UserService;
@@ -17,6 +18,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity chain) throws Exception {
     chain.authenticationProvider(authenticationProvider());
+    chain.csrf(AbstractHttpConfigurer::disable);
     chain.authorizeHttpRequests(auth -> {
       auth.requestMatchers("/users/login").permitAll();
       auth.requestMatchers("/config/*").permitAll();

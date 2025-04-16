@@ -43,7 +43,7 @@ public final class UserService implements UserDetailsService {
       credentials.confirmPassword() == null
      ) {
       throw new Exception(emptyFieldMessage);
-    } else if (credentials.password() != credentials.confirmPassword()) {
+    } else if (!credentials.password().equals(credentials.confirmPassword())) {
       throw new Exception(failedPasswordConfirmationMessage);
     } else {
       return repo.save(new UserEntity(
@@ -67,7 +67,7 @@ public final class UserService implements UserDetailsService {
       credentials.confirmPassword() == null
     ) {
       throw new Exception(emptyFieldMessage);
-    } else if (credentials.password() != credentials.confirmPassword()) {
+    } else if (!credentials.password().equals(credentials.confirmPassword())) {
       throw new Exception(failedPasswordConfirmationMessage);
     } else {
       return repo.save(new UserEntity(
@@ -92,7 +92,7 @@ public final class UserService implements UserDetailsService {
       newPassword.confirmNewPassword() == null
     ) {
       throw new Exception(emptyFieldMessage);
-    } else if (newPassword.newPassword() != newPassword.confirmNewPassword()) {
+    } else if (!newPassword.newPassword().equals(newPassword.confirmNewPassword())) {
       throw new Exception(failedPasswordConfirmationMessage);
     } else if (!passwordEncoder.matches(
       newPassword.newPassword(),
@@ -116,7 +116,7 @@ public final class UserService implements UserDetailsService {
       newPassword.confirmNewPassword() == null
     ) {
       throw new Exception(emptyFieldMessage);
-    } else if (newPassword.newPassword() != newPassword.confirmNewPassword()) {
+    } else if (!newPassword.newPassword().equals(newPassword.confirmNewPassword())) {
       throw new Exception(failedPasswordConfirmationMessage);
     } else {
       target = repo.findById(targetUserId).get();
