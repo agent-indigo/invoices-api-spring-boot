@@ -21,7 +21,7 @@ public final class UserService implements UserDetailsService {
   private UserRepository repo;
   private UserEntity target;
   private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
-  private SimpleGrantedAuthority rootAuthority = new SimpleGrantedAuthority("ROLE_ROOT");
+  private Role rootRole = Role.root;
   private SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority("ROLE_USER");
   private String emptyFieldMessage = "At least one field is empty.";
   private String failedPasswordConfirmationMessage = "Passwords don't match.";
@@ -51,9 +51,9 @@ public final class UserService implements UserDetailsService {
       return repo.save(new UserEntity(
         "root",
         passwordEncoder.encode(credentials.password()),
-        Role.root,
+        rootRole,
         List.of(
-          rootAuthority,
+          new SimpleGrantedAuthority("ROLE_ROOT"),
           userAuthority
         ),
         true,
@@ -135,7 +135,7 @@ public final class UserService implements UserDetailsService {
     return repo.findAll();
   }
   public void delete(UUID id) throws BadRequestException {
-    if (repo.findById(id).get().getAuthorities().contains(rootAuthority)) {
+    if (repo.findById(id).get().getRole() == rootRole) {
       throw new BadRequestException("The root user shouldn't be deleted.");
     } else {
       repo.deleteById(id);
