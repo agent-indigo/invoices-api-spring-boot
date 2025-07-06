@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.UUID;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,19 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.keyin.hynes.braden.invoices.api.entities.User;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
 import com.keyin.hynes.braden.invoices.api.records.NewPassword;
+import com.keyin.hynes.braden.invoices.api.services.AuthenticationService;
 import com.keyin.hynes.braden.invoices.api.services.UserLookupService;
 import com.keyin.hynes.braden.invoices.api.services.UserManagementService;
+import jakarta.servlet.http.HttpServletResponse;
 @RestController
 @CrossOrigin
 @RequestMapping("/users")
 public final class UserRestController {
+  private final AuthenticationService authenticationService;
   private final UserManagementService userManagementService;
   private final UserLookupService userLookupService;
   @Autowired
   public UserRestController(
+    final AuthenticationService authenticationService,
     final UserManagementService userManagementService,
     final UserLookupService userLookupService
   ) {
+    this.authenticationService = authenticationService;
     this.userManagementService = userManagementService;
     this.userLookupService = userLookupService;
   }
@@ -71,5 +77,19 @@ public final class UserRestController {
   @DeleteMapping("/{id}")
   public void delete(@PathVariable final UUID id) throws BadRequestException {
     userManagementService.delete(id);
+  }
+  @PostMapping("/login")
+  public ResponseEntity<?> login(
+    @RequestBody Credentials credentials,
+    HttpServletResponse response
+  ) {
+    return authenticationService.login(
+      credentials,
+      response
+    );
+  }
+  @PostMapping("/logout")
+  public ResponseEntity<?> logout(HttpServletResponse response) {
+    return authenticationService.logout(response);
   }
 }

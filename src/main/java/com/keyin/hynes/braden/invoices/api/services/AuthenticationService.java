@@ -1,23 +1,71 @@
 package com.keyin.hynes.braden.invoices.api.services;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import com.keyin.hynes.braden.invoices.api.entities.User;
+import com.keyin.hynes.braden.invoices.api.interfaces.repositories.UserRepository;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 @Service
 public final class AuthenticationService {
+  private final UserRepository userRepository;
+  private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private Authentication authentication;
+  private User user;
+  private UUID userId;
+  private Cookie cookie;
+  private String jwt;
   @Autowired
-  public AuthenticationService(final AuthenticationManager authenticationManager) {
+  public AuthenticationService(
+    final UserRepository userRepository,
+    final JwtService jwtService,
+    final AuthenticationManager authenticationManager
+  ) {
+    this.userRepository = userRepository;
+    this.jwtService = jwtService;
     this.authenticationManager = authenticationManager;
   }
-  private Authentication authentication;
-  public String login (Credentials credentials) {
+  public ResponseEntity<?> login (
+    Credentials credentials,
+    HttpServletResponse response
+  ) {
     authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
       credentials.username(),
       credentials.password()
     ));
-    return authentication.isAuthenticated()? "Welcome!" : "Unauthorized.";
+    if (authentication.isAuthenticated()) {
+      user = userRepository.findByUsername(authentication.getName());
+      userId = user.getId();
+      jwt = jwtService.generateJwt(userId);
+      cookie = new Cookie(
+        "token",
+        jwt
+      );
+      cookie.setHttpOnly(true);
+      cookie.setSecure(true);
+      cookie.setPath("/");
+      cookie.setMaxAge(2592030); // 30 days
+      response.addCookie(cookie);
+      return ResponseEntity.ok().build();
+    } else {
+      return ResponseEntity.status(401).build();
+    }
+  }
+  public ResponseEntity<?> logout (
+    HttpServletResponse response
+  ) {
+    cookie = new Cookie("token", null);
+    cookie.setHttpOnly(true);
+    cookie.setSecure(true);
+    cookie.setPath("/");
+    cookie.setMaxAge(0); // Delete the cookie
+    response.addCookie(cookie);
+    return ResponseEntity.ok().build();
   }
 }
