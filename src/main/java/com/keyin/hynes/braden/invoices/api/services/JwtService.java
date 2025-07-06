@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -60,18 +59,15 @@ public final class JwtService {
       getSecretKey()
     ).compact();
   }
-  private Claims getClaims(final String jwt) {
-    return Jwts.parser().verifyWith(
-      getSecretKey()
-    ).build().parseSignedClaims(
-      jwt
-    ).getPayload();
-  }
   private <T> T getClaim(
     final String jwt,
     final Function<Claims, T> claimsResolver
   ) {
-    return claimsResolver.apply(getClaims(jwt));
+    return claimsResolver.apply(Jwts.parser().verifyWith(
+      getSecretKey()
+    ).build().parseSignedClaims(
+      jwt
+    ).getPayload());
   }
   public UUID getUserId(final String jwt) {
     return UUID.fromString(getClaim(
@@ -79,21 +75,19 @@ public final class JwtService {
       Claims::getSubject
     ));
   }
-  private Date getExpirationDate(final String jwt) {
+  public boolean isJwtValid(final String jwt) {
     return getClaim(
       jwt,
+      Claims::getNotBefore
+    ).before(new Date(System.currentTimeMillis())) && getClaim(
+      jwt,
       Claims::getExpiration
-    );
-  }
-  private boolean isTokenExpired(final String jwt) {
-    return getExpirationDate(jwt).before(new Date());
-  }
-  public boolean validateJwt(
-    final String jwt,
-    final UserDetails userDetails
-  ) {
-    return getUserId(jwt).equals(
-      UUID.fromString(userDetails.getUsername())
-    ) && !isTokenExpired(jwt);
+    ).after(new Date(System.currentTimeMillis())) && getClaim(
+      jwt,
+      Claims::getIssuer
+    ).equals("invoices.api") && getClaim(
+      jwt,
+      Claims::getAudience
+    ).contains("invoices.client");
   }
 }
