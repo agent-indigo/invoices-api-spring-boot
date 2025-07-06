@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.keyin.hynes.braden.invoices.api.entities.User;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.UserRepository;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
+import com.keyin.hynes.braden.invoices.api.records.UserWithJwt;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 @Service
@@ -52,14 +53,19 @@ public final class AuthenticationService {
       cookie.setPath("/");
       cookie.setMaxAge(2592030); // 30 days
       response.addCookie(cookie);
-      return ResponseEntity.ok().build();
+      return ResponseEntity.ok().body(new UserWithJwt(
+        userId,
+        user.getCreatedAt(),
+        user.getUpdatedAt(),
+        user.getUsername(),
+        user.getRole(),
+        jwt
+      ));
     } else {
       return ResponseEntity.status(401).build();
     }
   }
-  public ResponseEntity<?> logout (
-    HttpServletResponse response
-  ) {
+  public ResponseEntity<?> logout (HttpServletResponse response) {
     cookie = new Cookie("token", null);
     cookie.setHttpOnly(true);
     cookie.setSecure(true);
