@@ -13,35 +13,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.keyin.hynes.braden.invoices.api.entities.UserEntity;
+import com.keyin.hynes.braden.invoices.api.entities.User;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
 import com.keyin.hynes.braden.invoices.api.records.NewPassword;
-import com.keyin.hynes.braden.invoices.api.services.UserService;
+import com.keyin.hynes.braden.invoices.api.services.UserLookupService;
+import com.keyin.hynes.braden.invoices.api.services.UserManagementService;
 @RestController
 @CrossOrigin
 @RequestMapping("/users")
 public final class UserRestController {
   @Autowired
-  private UserService service = new UserService();
+  private final UserManagementService userManagementService = new UserManagementService();
+  @Autowired
+  private final UserLookupService userLookupService = new UserLookupService();
   @GetMapping
-  public List<UserEntity> list() {
-    return service.list();
+  public List<User> list() {
+    return userLookupService.loadAllUsers();
   }
   @GetMapping("/{id}")
-  public UserDetails get(@PathVariable UUID id) {
-    return service.get(id);
+  public UserDetails get(@PathVariable("id") final UUID id) {
+    return userLookupService.loadUserById(id);
   }
   @PostMapping
   public UserDetails add(@RequestBody Credentials credentials) throws BadRequestException {
-    return service.add(credentials);
+    return userManagementService.add(credentials);
   }
   @PatchMapping
   public UserDetails changePassword(
     // TO DO: Get this from the JWT
-    UUID id,
+    final UUID id,
     @RequestBody NewPassword newPassword
   ) throws BadRequestException {
-    return service.changePassword(
+    return userManagementService.changePassword(
       id,
       newPassword
     );
@@ -49,18 +52,18 @@ public final class UserRestController {
   @PatchMapping("/{id}")
   public UserDetails resetPassword(
     // TO DO: Get this from the JWT
-    UUID currentUserId,
-    @PathVariable("id") UUID targetUserId,
+    final UUID currentUserId,
+    @PathVariable("id") final UUID targetUserId,
     @RequestBody NewPassword newPassword
   ) throws BadRequestException {
-    return service.resetPassword(
+    return userManagementService.resetPassword(
       currentUserId,
       targetUserId,
       newPassword
     );
   }
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable UUID id) throws BadRequestException {
-    service.delete(id);
+  public void delete(@PathVariable final UUID id) throws BadRequestException {
+    userManagementService.delete(id);
   }
 }

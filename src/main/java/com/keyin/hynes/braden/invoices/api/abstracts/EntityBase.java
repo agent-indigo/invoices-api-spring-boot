@@ -8,7 +8,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 @Data
 @MappedSuperclass
-public abstract class DataEntity {
+public abstract class EntityBase {
   @Id
   private final UUID id = UUID.randomUUID();
   @CreatedDate

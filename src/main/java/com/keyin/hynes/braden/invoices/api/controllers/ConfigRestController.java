@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.keyin.hynes.braden.invoices.api.records.ConfigStatus;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
-import com.keyin.hynes.braden.invoices.api.services.UserService;
+import com.keyin.hynes.braden.invoices.api.services.ConfigService;
 @RestController
 @CrossOrigin
 @RequestMapping("/config")
 public final class ConfigRestController {
   @Autowired
-  private UserService service = new UserService();
+  private final ConfigService configService = new ConfigService();
   @GetMapping("/status")
   public ConfigStatus getConfigStatus() {
-    return service.getConfigStatus();
+    return configService.getConfigStatus();
   }
   @PostMapping("/rootPassword")
   public UserDetails createRootUser(@RequestBody Credentials credentials) throws Exception {
-    return service.createRootUser(credentials);
+    return configService.createRootUser(credentials);
   }
 }

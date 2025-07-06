@@ -3,21 +3,21 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.keyin.hynes.braden.invoices.api.entities.InvoiceEntity;
+import com.keyin.hynes.braden.invoices.api.entities.Invoice;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.InvoiceRepository;
 @Service
 public final class InvoiceService {
   @Autowired
-  private InvoiceRepository repo;
-  private InvoiceEntity target;
+  private InvoiceRepository invoiceRepository;
+  private Invoice target;
   /**
    * @name    getAll
    * @desc    List all invoices
    * @route   GET /invoices
    * @access  private
    */
-  public List<InvoiceEntity> getAll() {
-    return repo.findAll();
+  public List<Invoice> getAll() {
+    return invoiceRepository.findAll();
   }
   /**
    * @name    add
@@ -25,8 +25,8 @@ public final class InvoiceService {
    * @route   POST /invoices
    * @access  private
    */
-  public InvoiceEntity add(InvoiceEntity invoice) {
-    return repo.save(invoice);
+  public Invoice add(final Invoice invoice) {
+    return invoiceRepository.save(invoice);
   }
   /**
    * @name    edt
@@ -34,18 +34,18 @@ public final class InvoiceService {
    * @route   changes /invoices/:id
    * @access  private
    */
-  public InvoiceEntity edit(
-    UUID id,
-    InvoiceEntity changes
+  public Invoice edit(
+    final UUID id,
+    final Invoice changes
   ) {
-    target = repo.findById(id).get();
+    target = invoiceRepository.findById(id).get();
     if (changes.getVendor() != null) target.setVendor(changes.getVendor());
     if (changes.getSubtotal() != null) target.setSubtotal(changes.getSubtotal());
     if (changes.getHst() != null) target.setHst(changes.getHst());
     if (changes.getTotal() != null) target.setTotal(changes.getTotal());
     if (changes.getInvoiceId() != null) target.setInvoiceId(changes.getInvoiceId());
     if (changes.getDate() != null) target.setDate(changes.getDate());
-    return repo.save(target);
+    return invoiceRepository.save(target);
   }
   /**
    * @name    delete
@@ -53,7 +53,7 @@ public final class InvoiceService {
    * @route   DELETE /invoices/:id
    * @access  private
    */
-  public void delete(UUID id) {
-    repo.deleteById(id);
+  public void delete(final UUID id) {
+    invoiceRepository.deleteById(id);
   }
 }

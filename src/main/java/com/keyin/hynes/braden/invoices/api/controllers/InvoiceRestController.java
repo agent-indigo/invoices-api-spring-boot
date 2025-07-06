@@ -11,26 +11,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.keyin.hynes.braden.invoices.api.entities.InvoiceEntity;
+import com.keyin.hynes.braden.invoices.api.entities.Invoice;
 import com.keyin.hynes.braden.invoices.api.services.InvoiceService;
 @RestController
 @CrossOrigin
 @RequestMapping("/invoices")
 public final class InvoiceRestController {
   @Autowired
-  private InvoiceService service = new InvoiceService();
+  private final InvoiceService service = new InvoiceService();
   @GetMapping
-  public List<InvoiceEntity> getAll() {
+  public List<Invoice> getAll() {
     return service.getAll();
   }
   @PostMapping
-  public InvoiceEntity add(@RequestBody InvoiceEntity invoice) {
+  public Invoice add(@RequestBody Invoice invoice) {
     return service.add(invoice);
   }
   @PatchMapping("/{id}")
-  public InvoiceEntity edit (
+  public Invoice edit (
     @PathVariable("id") UUID id,
-    @RequestBody InvoiceEntity changes
+    @RequestBody Invoice changes
   ) {
     return service.edit(
       id,
