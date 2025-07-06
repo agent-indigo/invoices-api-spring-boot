@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
 @Service
 public final class AuthenticationService {
+  private final AuthenticationManager authenticationManager;
   @Autowired
-  private AuthenticationManager authenticationManager;
+  public AuthenticationService(final AuthenticationManager authenticationManager) {
+    this.authenticationManager = authenticationManager;
+  }
   private Authentication authentication;
   public String login (Credentials credentials) {
     authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

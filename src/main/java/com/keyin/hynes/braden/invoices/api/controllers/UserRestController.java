@@ -22,10 +22,16 @@ import com.keyin.hynes.braden.invoices.api.services.UserManagementService;
 @CrossOrigin
 @RequestMapping("/users")
 public final class UserRestController {
+  private final UserManagementService userManagementService;
+  private final UserLookupService userLookupService;
   @Autowired
-  private final UserManagementService userManagementService = new UserManagementService();
-  @Autowired
-  private final UserLookupService userLookupService = new UserLookupService();
+  public UserRestController(
+    final UserManagementService userManagementService,
+    final UserLookupService userLookupService
+  ) {
+    this.userManagementService = userManagementService;
+    this.userLookupService = userLookupService;
+  }
   @GetMapping
   public List<User> list() {
     return userLookupService.loadAllUsers();

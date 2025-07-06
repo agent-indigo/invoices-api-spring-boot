@@ -12,13 +12,19 @@ import com.keyin.hynes.braden.invoices.api.records.Credentials;
 import com.keyin.hynes.braden.invoices.api.records.NewPassword;
 @Service
 public final class UserManagementService {
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
   private User target;
-  @Autowired
-  private BCryptPasswordEncoder passwordEncoder;
+  private final BCryptPasswordEncoder passwordEncoder;
   private final String emptyFieldMessage = "At least one field is empty.";
   private final String failedPasswordConfirmationMessage = "Passwords don't match.";
+  @Autowired
+  public UserManagementService(
+    final UserRepository userRepository,
+    final BCryptPasswordEncoder passwordEncoder
+  ) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
   public UserDetails add(Credentials credentials) throws BadRequestException {
     if (
       credentials.username() == null |

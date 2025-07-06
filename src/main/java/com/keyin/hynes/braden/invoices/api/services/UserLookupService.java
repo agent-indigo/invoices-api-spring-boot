@@ -10,8 +10,11 @@ import com.keyin.hynes.braden.invoices.api.entities.User;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.UserRepository;
 @Service
 public final class UserLookupService implements UserDetailsService {
+  private final UserRepository userRepository;
   @Autowired
-  private UserRepository userRepository;
+  public UserLookupService(final UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
     return userRepository.findByUsername(username);

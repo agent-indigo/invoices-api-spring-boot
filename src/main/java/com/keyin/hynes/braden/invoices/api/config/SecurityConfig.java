@@ -21,12 +21,15 @@ import com.keyin.hynes.braden.invoices.api.services.UserLookupService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-  @Autowired
-  private final UserLookupService userLookupService = new UserLookupService();
+  private final UserLookupService userLookupService;
   private final DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
   private final DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
   private final DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler = new DefaultMethodSecurityExpressionHandler();
   private final JwtFilter jwtFilter = new JwtFilter();
+  @Autowired
+  public SecurityConfig(final UserLookupService userLookupService) {
+    this.userLookupService = userLookupService;
+  }
   @Bean
   public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();

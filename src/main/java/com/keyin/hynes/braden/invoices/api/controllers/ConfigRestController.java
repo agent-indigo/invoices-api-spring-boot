@@ -14,8 +14,11 @@ import com.keyin.hynes.braden.invoices.api.services.ConfigService;
 @CrossOrigin
 @RequestMapping("/config")
 public final class ConfigRestController {
+  private final ConfigService configService;
   @Autowired
-  private final ConfigService configService = new ConfigService();
+  public ConfigRestController(final ConfigService configService) {
+    this.configService = configService;
+  }
   @GetMapping("/status")
   public ConfigStatus getConfigStatus() {
     return configService.getConfigStatus();

@@ -13,10 +13,16 @@ import com.keyin.hynes.braden.invoices.api.records.ConfigStatus;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
 @Service
 public final class ConfigService {
+  private final UserRepository userRepository;
+  private final BCryptPasswordEncoder passwordEncoder;
   @Autowired
-  private UserRepository userRepository;
-  @Autowired
-  private BCryptPasswordEncoder passwordEncoder;
+  public ConfigService(
+    final UserRepository userRepository,
+    final BCryptPasswordEncoder passwordEncoder
+  ) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
   private boolean rootExists() {
     return userRepository.findAllByRole(Role.root).size() > 0;
   }

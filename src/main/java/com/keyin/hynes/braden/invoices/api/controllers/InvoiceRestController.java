@@ -17,8 +17,11 @@ import com.keyin.hynes.braden.invoices.api.services.InvoiceService;
 @CrossOrigin
 @RequestMapping("/invoices")
 public final class InvoiceRestController {
+  private final InvoiceService service;
   @Autowired
-  private final InvoiceService service = new InvoiceService();
+  public InvoiceRestController(final InvoiceService service) {
+    this.service = service;
+  }
   @GetMapping
   public List<Invoice> getAll() {
     return service.getAll();

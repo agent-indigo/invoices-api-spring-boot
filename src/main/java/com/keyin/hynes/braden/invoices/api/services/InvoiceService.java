@@ -7,9 +7,12 @@ import com.keyin.hynes.braden.invoices.api.entities.Invoice;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.InvoiceRepository;
 @Service
 public final class InvoiceService {
-  @Autowired
-  private InvoiceRepository invoiceRepository;
+  private final InvoiceRepository invoiceRepository;
   private Invoice target;
+  @Autowired
+  public InvoiceService(final InvoiceRepository invoiceRepository) {
+    this.invoiceRepository = invoiceRepository;
+  }
   /**
    * @name    getAll
    * @desc    List all invoices
