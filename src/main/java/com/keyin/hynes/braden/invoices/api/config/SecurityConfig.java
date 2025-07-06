@@ -26,7 +26,6 @@ public class SecurityConfig {
   private final DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
   private final DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
   private final DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler = new DefaultMethodSecurityExpressionHandler();
-  @Autowired
   private final JwtFilter jwtFilter = new JwtFilter();
   @Bean
   public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
