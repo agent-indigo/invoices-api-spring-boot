@@ -27,13 +27,13 @@ public final class InvoiceRestController {
     return service.getAll();
   }
   @PostMapping
-  public Invoice add(@RequestBody Invoice invoice) {
+  public Invoice add(@RequestBody final Invoice invoice) {
     return service.add(invoice);
   }
   @PatchMapping("/{id}")
   public Invoice edit (
-    @PathVariable("id") UUID id,
-    @RequestBody Invoice changes
+    @PathVariable("id") final UUID id,
+    @RequestBody final Invoice changes
   ) {
     return service.edit(
       id,
@@ -41,7 +41,7 @@ public final class InvoiceRestController {
     );
   }
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable("id") UUID id) {
+  public void delete(@PathVariable("id") final UUID id) {
     service.delete(id);
   }
 }

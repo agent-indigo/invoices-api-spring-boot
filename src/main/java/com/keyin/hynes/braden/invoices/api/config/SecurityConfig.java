@@ -59,7 +59,7 @@ public class SecurityConfig {
     return defaultMethodSecurityExpressionHandler;
   }
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+  public SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) throws Exception {
     httpSecurity.authenticationProvider(authenticationProvider());
     httpSecurity.csrf(AbstractHttpConfigurer::disable);
     httpSecurity.httpBasic(Customizer.withDefaults());
