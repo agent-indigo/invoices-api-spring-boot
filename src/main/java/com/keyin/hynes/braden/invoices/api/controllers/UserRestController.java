@@ -86,7 +86,7 @@ public final class UserRestController {
       response
     );
   }
-  @PostMapping("/logout")
+  @GetMapping("/logout")
   public ResponseEntity<?> logout(final HttpServletResponse response) {
     return authenticationService.logout(response);
   }
