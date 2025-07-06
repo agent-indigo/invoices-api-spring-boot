@@ -15,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.keyin.hynes.braden.invoices.api.filters.JwtFilter;
 import com.keyin.hynes.braden.invoices.api.services.UserLookupService;
 @Configuration
 @EnableWebSecurity
@@ -24,6 +26,8 @@ public class SecurityConfig {
   private final DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
   private final DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
   private final DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler = new DefaultMethodSecurityExpressionHandler();
+  @Autowired
+  private final JwtFilter jwtFilter = new JwtFilter();
   @Bean
   public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
@@ -70,6 +74,10 @@ public class SecurityConfig {
       ).permitAll();
       authorization.anyRequest().hasRole("USER");
     });
+    httpSecurity.addFilterBefore(
+      jwtFilter,
+      UsernamePasswordAuthenticationFilter.class
+    );
     return httpSecurity.build();
   }
 }
