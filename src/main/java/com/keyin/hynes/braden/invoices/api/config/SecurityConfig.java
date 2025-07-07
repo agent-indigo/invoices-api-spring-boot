@@ -65,16 +65,16 @@ public class SecurityConfig {
     httpSecurity.httpBasic(Customizer.withDefaults());
     httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     httpSecurity.authorizeHttpRequests(authorization -> {
-      authorization.requestMatchers("/users/*").hasRole("ROOT");
       authorization.requestMatchers(
         "/users/logout",
-        "/users/changePassword"
+        "/users/changePassword",
+        "/invoices/*"
       ).hasRole("USER");
       authorization.requestMatchers(
         "/config/*",
         "/users/login"
       ).permitAll();
-      authorization.anyRequest().hasRole("USER");
+      authorization.anyRequest().hasRole("ROOT");
     });
     httpSecurity.addFilterBefore(
       jwtFilter,
