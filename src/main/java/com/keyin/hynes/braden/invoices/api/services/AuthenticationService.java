@@ -17,6 +17,7 @@ public final class AuthenticationService {
   private final UserRepository userRepository;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private final HttpServletResponse response;
   private Authentication authentication;
   private User user;
   private UUID userId;
@@ -26,16 +27,15 @@ public final class AuthenticationService {
   public AuthenticationService(
     final UserRepository userRepository,
     final JwtService jwtService,
-    final AuthenticationManager authenticationManager
+    final AuthenticationManager authenticationManager,
+    final HttpServletResponse response
   ) {
     this.userRepository = userRepository;
     this.jwtService = jwtService;
     this.authenticationManager = authenticationManager;
+    this.response = response;
   }
-  public ResponseEntity<?> login (
-    Credentials credentials,
-    HttpServletResponse response
-  ) {
+  public ResponseEntity<?> login (Credentials credentials) {
     authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
       credentials.username(),
       credentials.password()
@@ -65,8 +65,11 @@ public final class AuthenticationService {
       return ResponseEntity.status(401).build();
     }
   }
-  public ResponseEntity<?> logout (HttpServletResponse response) {
-    cookie = new Cookie("token", null);
+  public ResponseEntity<?> logout () {
+    cookie = new Cookie(
+      "token",
+      null
+    );
     cookie.setHttpOnly(true);
     cookie.setSecure(true);
     cookie.setPath("/");

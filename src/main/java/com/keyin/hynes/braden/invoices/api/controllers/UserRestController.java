@@ -81,13 +81,10 @@ public final class UserRestController {
     @RequestBody Credentials credentials,
     final HttpServletResponse response
   ) {
-    return authenticationService.login(
-      credentials,
-      response
-    );
+    return authenticationService.login(credentials);
   }
   @GetMapping("/logout")
-  public ResponseEntity<?> logout(final HttpServletResponse response) {
-    return authenticationService.logout(response);
+  public ResponseEntity<?> logout() {
+    return authenticationService.logout();
   }
 }
