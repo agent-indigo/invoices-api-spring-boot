@@ -9,7 +9,6 @@ import com.keyin.hynes.braden.invoices.api.enums.Role;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.UserRepository;
 import com.keyin.hynes.braden.invoices.api.records.Credentials;
 import com.keyin.hynes.braden.invoices.api.records.NewPassword;
-import jakarta.servlet.http.HttpServletRequest;
 @Service
 public final class UserManagementService {
   private final UserRepository userRepository;
@@ -45,10 +44,10 @@ public final class UserManagementService {
     }
   }
   public User changePassword(
-    final HttpServletRequest request,
+    final String authorizationHeader,
     NewPassword newPassword
   ) throws BadRequestException {
-    target = userRepository.findById(jwtService.getUserId(request.getHeader("Authorization").substring(7))).get();
+    target = userRepository.findById(jwtService.getUserId(authorizationHeader.substring(7))).get();
     if (
       newPassword.currentPassword() == null |
       newPassword.newPassword() == null |
@@ -73,11 +72,11 @@ public final class UserManagementService {
     }
   }
   public User resetPassword(
-    final HttpServletRequest request,
+    final String authorizationHeader,
     final UUID targetUserId,
     NewPassword newPassword
   ) throws BadRequestException {
-    if (jwtService.getUserId(request.getHeader("Authorization").substring(7)) == targetUserId) {
+    if (jwtService.getUserId(authorizationHeader.substring(7)) == targetUserId) {
       throw new BadRequestException("You can't change your own password this way.");
     } else if (
       newPassword.newPassword() == null |
