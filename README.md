@@ -14,7 +14,7 @@ Front end: [repo](https://github.com/agent-indigo/invoices-web-client-react)
 
 ## Setup
 
-- Create a new MongoDB database.
+- Create a new PostgreSQL database.
 
 - Copy `application.properties.example` to `src/main/resources/application.properties` and fill in the values.
 

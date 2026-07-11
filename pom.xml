@@ -21,7 +21,7 @@
 	  spring-boot-starter-parent
 	</artifactId>
 	<version>
-	  3.4.4
+	  3.3.0
 	</version>
   </parent>
   <groupId>
@@ -41,13 +41,13 @@
   </description>
   <properties>
 	<java.version>
-	  21
+	  17
 	</java.version>
 	<maven.compiler.source>
-	  21
+	  17
 	</maven.compiler.source>
 	<maven.compiler.target>
-	  21
+	  17
 	</maven.compiler.target>
   </properties>
   <dependencies>
@@ -59,7 +59,7 @@
 	    jjwt-jackson
 	  </artifactId>
   	  <version>
-	    0.12.6
+	    0.12.5
 	  </version>
     </dependency>
     <dependency>
@@ -70,18 +70,7 @@
 	    jjwt-impl
 	  </artifactId>
   	  <version>
-	    0.12.6
-	  </version>
-    </dependency>
-    <dependency>
-  	  <groupId>
-		io.jsonwebtoken
-	  </groupId>
-  	  <artifactId>
-	    jjwt-api
-	  </artifactId>
-  	  <version>
-	    0.12.6
+	    0.12.5
 	  </version>
     </dependency>
   	<dependency>
