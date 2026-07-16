@@ -16,7 +16,7 @@ public final class UserLookupService implements UserDetailsService {
   }
   @Override
   public User loadUserByUsername(final String username) throws UsernameNotFoundException {
-    return userRepository.findByUsername(username);
+    return userRepository.findByUsername(username).get();
   }
   public User loadUserById(final UUID id) {
     return userRepository.findById(id).get();

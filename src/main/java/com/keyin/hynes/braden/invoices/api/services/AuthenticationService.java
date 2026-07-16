@@ -41,7 +41,7 @@ public final class AuthenticationService {
       credentials.password()
     ));
     if (authentication.isAuthenticated()) {
-      user = userRepository.findByUsername(authentication.getName());
+      user = userRepository.findByUsername(authentication.getName()).get();
       userId = user.getId();
       jwt = jwtService.generateJwt(userId);
       cookie = new Cookie(

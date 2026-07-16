@@ -1,8 +1,8 @@
 package com.keyin.hynes.braden.invoices.api.abstracts;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
@@ -11,8 +11,8 @@ import lombok.Data;
 public abstract class EntityBase {
   @Id
   private final UUID id = UUID.randomUUID();
-  @CreatedDate
+  @CreationTimestamp
   private final LocalDateTime createdAt = LocalDateTime.now();
-  @LastModifiedDate
+  @UpdateTimestamp
   private LocalDateTime updatedAt = LocalDateTime.now();
 }
