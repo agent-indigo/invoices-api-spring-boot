@@ -4,6 +4,7 @@ import java.util.UUID;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +43,7 @@ public final class UserRestController {
     return userLookupService.loadAllUsers();
   }
   @GetMapping("/{id}")
-  public User get(@PathVariable("id") final UUID id) {
+  public User get(@PathVariable("id") final @NonNull UUID id) {
     return userLookupService.loadUserById(id);
   }
   @PostMapping
@@ -62,7 +63,7 @@ public final class UserRestController {
   @PatchMapping("/{id}")
   public User resetPassword(
     @RequestHeader("Authorization") String authorizationHeader,
-    @PathVariable("id") final UUID targetUserId,
+    @PathVariable("id") final @NonNull UUID targetUserId,
     @RequestBody NewPassword newPassword
   ) throws BadRequestException {
     return userManagementService.resetPassword(
@@ -72,7 +73,7 @@ public final class UserRestController {
     );
   }
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable final UUID id) throws BadRequestException {
+  public void delete(@PathVariable final @NonNull UUID id) throws BadRequestException {
     userManagementService.delete(id);
   }
   @PostMapping("/login")

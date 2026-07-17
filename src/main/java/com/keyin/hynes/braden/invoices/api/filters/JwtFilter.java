@@ -27,6 +27,7 @@ public final class JwtFilter extends OncePerRequestFilter {
   private UUID id;
   private UserDetails userDetails;
   private UsernamePasswordAuthenticationToken authenticationToken;
+  @SuppressWarnings("null")
   @Override
   protected void doFilterInternal(
     final @NonNull HttpServletRequest request,

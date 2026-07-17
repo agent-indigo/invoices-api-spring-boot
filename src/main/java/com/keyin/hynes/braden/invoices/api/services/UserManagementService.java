@@ -2,6 +2,7 @@ package com.keyin.hynes.braden.invoices.api.services;
 import java.util.UUID;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.keyin.hynes.braden.invoices.api.entities.User;
@@ -43,6 +44,7 @@ public final class UserManagementService {
       ));
     }
   }
+  @SuppressWarnings("null")
   public User changePassword(
     final String authorizationHeader,
     NewPassword newPassword
@@ -71,9 +73,10 @@ public final class UserManagementService {
       return userRepository.save(target);
     }
   }
+  @SuppressWarnings("null")
   public User resetPassword(
     final String authorizationHeader,
-    final UUID targetUserId,
+    final @NonNull UUID targetUserId,
     NewPassword newPassword
   ) throws BadRequestException {
     if (jwtService.getUserId(authorizationHeader.substring(7)) == targetUserId) {
@@ -91,7 +94,7 @@ public final class UserManagementService {
       return userRepository.save(target);
     }
   }
-  public void delete(final UUID id) throws BadRequestException {
+  public void delete(final @NonNull UUID id) throws BadRequestException {
     if (userRepository.findById(id).get().getRole() == Role.root) {
       throw new BadRequestException("The root user shouldn't be deleted.");
     } else {

@@ -2,6 +2,7 @@ package com.keyin.hynes.braden.invoices.api.controllers;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +28,12 @@ public final class InvoiceRestController {
     return service.getAll();
   }
   @PostMapping
-  public Invoice add(@RequestBody final Invoice invoice) {
+  public Invoice add(@RequestBody final @NonNull Invoice invoice) {
     return service.add(invoice);
   }
   @PatchMapping("/{id}")
   public Invoice edit (
-    @PathVariable("id") final UUID id,
+    @PathVariable("id") final @NonNull UUID id,
     @RequestBody final Invoice changes
   ) {
     return service.edit(
@@ -41,7 +42,7 @@ public final class InvoiceRestController {
     );
   }
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable("id") final UUID id) {
+  public void delete(@PathVariable("id") final @NonNull UUID id) {
     service.delete(id);
   }
 }

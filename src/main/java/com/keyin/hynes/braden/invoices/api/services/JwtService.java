@@ -69,12 +69,14 @@ public final class JwtService {
       jwt
     ).getPayload());
   }
+  @SuppressWarnings("null")
   public UUID getUserId(final String jwt) {
     return UUID.fromString(getClaim(
       jwt,
       Claims::getSubject
     ));
   }
+  @SuppressWarnings("null")
   public boolean isJwtValid(final String jwt) {
     return getClaim(
       jwt,

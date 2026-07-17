@@ -2,6 +2,7 @@ package com.keyin.hynes.braden.invoices.api.services;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import com.keyin.hynes.braden.invoices.api.entities.Invoice;
 import com.keyin.hynes.braden.invoices.api.interfaces.repositories.InvoiceRepository;
@@ -28,7 +29,7 @@ public final class InvoiceService {
    * @route   POST /invoices
    * @access  private
    */
-  public Invoice add(final Invoice invoice) {
+  public Invoice add(final @NonNull Invoice invoice) {
     return invoiceRepository.save(invoice);
   }
   /**
@@ -37,8 +38,9 @@ public final class InvoiceService {
    * @route   changes /invoices/:id
    * @access  private
    */
+  @SuppressWarnings("null")
   public Invoice edit(
-    final UUID id,
+    final @NonNull UUID id,
     final Invoice changes
   ) {
     target = invoiceRepository.findById(id).get();
@@ -56,7 +58,7 @@ public final class InvoiceService {
    * @route   DELETE /invoices/:id
    * @access  private
    */
-  public void delete(final UUID id) {
+  public void delete(final @NonNull UUID id) {
     invoiceRepository.deleteById(id);
   }
 }
