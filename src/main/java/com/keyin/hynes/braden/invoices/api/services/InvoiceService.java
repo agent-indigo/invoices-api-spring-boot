@@ -33,9 +33,9 @@ public final class InvoiceService {
     return invoiceRepository.save(invoice);
   }
   /**
-   * @name    edt
+   * @name    edit
    * @desc    Edit an invoice
-   * @route   changes /invoices/:id
+   * @route   PATCH /invoices/:id
    * @access  private
    */
   @SuppressWarnings("null")
