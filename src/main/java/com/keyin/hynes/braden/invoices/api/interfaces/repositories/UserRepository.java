@@ -11,5 +11,5 @@ import com.keyin.hynes.braden.invoices.api.enums.Role;
 public interface UserRepository extends JpaRepository<User, UUID> {
   Optional<User> findByUsername(final String username);
   Set<User> findAllByRole(final Role role);
-  Set<User> findAllBySimpleGrantedAuthority(final SimpleGrantedAuthority simpleGrantedAuthority);
+  Set<User> findAllByAuthority(final SimpleGrantedAuthority authority);
 }
